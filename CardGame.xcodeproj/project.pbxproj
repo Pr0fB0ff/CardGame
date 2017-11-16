@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1F612F991FAFB419005461B1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F612F981FAFB419005461B1 /* main.cpp */; };
+		1F94AFFF1FBD362A00A6DA44 /* HandComparator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F94AFFE1FBD362900A6DA44 /* HandComparator.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		1F612F951FAFB419005461B1 /* CardGame */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CardGame; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F612F981FAFB419005461B1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		1F94AFFE1FBD362900A6DA44 /* HandComparator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HandComparator.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				1F612F981FAFB419005461B1 /* main.cpp */,
+				1F94AFFE1FBD362900A6DA44 /* HandComparator.cpp */,
 			);
 			path = CardGame;
 			sourceTree = "<group>";
@@ -119,6 +122,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F94AFFF1FBD362A00A6DA44 /* HandComparator.cpp in Sources */,
 				1F612F991FAFB419005461B1 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
