@@ -25,7 +25,6 @@
 /* Begin PBXFileReference section */
 		1F612F951FAFB419005461B1 /* CardGame */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CardGame; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F612F981FAFB419005461B1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		1F94B0001FBD3C3F00A6DA44 /* HandComparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HandComparator.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +58,6 @@
 			isa = PBXGroup;
 			children = (
 				1F612F981FAFB419005461B1 /* main.cpp */,
-				1F94B0001FBD3C3F00A6DA44 /* HandComparator.h */,
 			);
 			path = CardGame;
 			sourceTree = "<group>";
