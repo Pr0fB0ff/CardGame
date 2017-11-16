@@ -4,32 +4,33 @@
 //#include <stdafx.h>
 #include <algorithm>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
 class Comparator{
 private:
-	int checkNumPair(int hand[][2][5]);
-	int checkNumKind(int hand[][2][5]);
-	int checkStraight(int hand[][2][5]);
-	int checkFlush(int hand[][2][5]);
-	int checkFullHouse(int hand[][2][5]);
-	int checkStraightFlush(int hand[][2][5]);
-	int checkRoyalFlush(int hand[][2][5]);
+	int checkNumPair(int hand[2][5]);
+	int checkNumKind(int hand[2][5]);
+	int checkStraight(int hand[2][5]);
+	int checkFlush(int hand[2][5]);
+	int checkFullHouse(int hand[2][5]);
+	int checkStraightFlush(int hand[2][5]);
+	int checkRoyalFlush(int hand[2][5]);
 public:
-	int getScore(int hand[][2][5]);
+	int getScore(int hand[2][5]);
 	string getHand(int score);
 };
 
-int Comparator::checkNumPair(int hand[][2][5])
+int Comparator::checkNumPair(int hand[2][5])
 {
 	int score = 0;
 	int firstPair = 0;
 	//Check for first pair
 	for (int i = 1; i < 5; i++) {
 		for (int j = i + 1; j < 5; j++) {
-			if (*hand[1][i] == *hand[1][j]) {
-				firstPair = *hand[1][i];
+			if (hand[1][i] == hand[1][j]) {
+				firstPair = hand[1][i];
 				score = 1;
 			}
 		}
@@ -38,7 +39,7 @@ int Comparator::checkNumPair(int hand[][2][5])
 	//Check for second pair.
 	for (int i = 1; i < 5; i++) {
 		for (int j = i + 1; j < 5; j++) {
-			if (*hand[1][i] == *hand[1][j] && *hand[1][i] != firstPair) {
+			if (hand[1][i] == hand[1][j] && hand[1][i] != firstPair) {
 				score = 2;
 			}
 		}
@@ -47,15 +48,15 @@ int Comparator::checkNumPair(int hand[][2][5])
 	return score;
 }
 
-int Comparator::checkNumKind(int hand[][2][5])
+int Comparator::checkNumKind(int hand[2][5])
 {
 	int score = 0;
 	int counter = 0;
 
 	for (int i = 0; i < 5; i++) {
-		int value = *hand[1][i];
+		int value = hand[1][i];
 		for (int i = 0; i < 5; i++) {
-			if (*hand[1][i] == value) {
+			if (hand[1][i] == value) {
 				counter++;
 			}
 		}
@@ -76,28 +77,32 @@ int Comparator::checkNumKind(int hand[][2][5])
 	return score;
 }
 
-int Comparator::checkStraight(int hand[][2][5])
+int Comparator::checkStraight(int hand[2][5])
 {
 	int score = 0;
+	int handVals[5];
+	for (int i = 0; i < 4; i++) {
+		handVals[i] = hand[1][i];
+	}
+	
+	sort(handVals, handVals + 5);
 
-	sort(hand[1][0], hand[1][5]);
-
-	if (*hand[1][1] == *hand[1][0] + 1 && *hand[1][2] == *hand[1][0] + 2 && *hand[1][3] == *hand[1][0] + 3 && *hand[1][4] == *hand[1][0] + 4) {
+	if (hand[1][1] == hand[1][0] + 1 && hand[1][2] == hand[1][0] + 2 && hand[1][3] == hand[1][0] + 3 && hand[1][4] == hand[1][0] + 4) {
 		score = 5;
 	}
 
 	return score;
 }
 
-int Comparator::checkFlush(int hand[][2][5])
+int Comparator::checkFlush(int hand[2][5])
 {
 	int score = 0;
 	int counter = 0;
 
 	for (int i = 0; i < 5; i++) {
-		int value = *hand[0][i];
+		int value = hand[0][i];
 		for (int i = 0; i < 5; i++) {
-			if (*hand[0][i] == value) {
+			if (hand[0][i] == value) {
 				counter++;
 			}
 
@@ -113,7 +118,7 @@ int Comparator::checkFlush(int hand[][2][5])
 	return 0;
 }
 
-int Comparator::checkFullHouse(int hand[][2][5])
+int Comparator::checkFullHouse(int hand[2][5])
 {
 	int score = 0;
 	int counter = 0;
@@ -121,14 +126,14 @@ int Comparator::checkFullHouse(int hand[][2][5])
 	bool checkForPair = false;
 
 	for (int i = 0; i < 5; i++) {
-		int value = *hand[1][i];
+		int value = hand[1][i];
 		for (int i = 0; i < 5; i++) {
-			if (*hand[1][i] == value) {
+			if (hand[1][i] == value) {
 				counter++;
 			}
 			//If three of a kind
 			if (counter == 3) {
-				kind = *hand[1][i];
+				kind = hand[1][i];
 				checkForPair = true;
 			}
 		}
@@ -137,7 +142,7 @@ int Comparator::checkFullHouse(int hand[][2][5])
 	if (checkForPair) {
 		for (int i = 1; i < 5; i++) {
 			for (int j = i + 1; j < 5; j++) {
-				if (*hand[1][i] == *hand[1][j] && *hand[1][i] != kind) {
+				if (hand[1][i] == hand[1][j] && hand[1][i] != kind) {
 					score = 6;
 				}
 			}
@@ -147,7 +152,7 @@ int Comparator::checkFullHouse(int hand[][2][5])
 	return score;
 }
 
-int Comparator::checkStraightFlush(int hand[][2][5])
+int Comparator::checkStraightFlush(int hand[2][5])
 {
 	int score = 0;
 	int checkStrt = checkStraight(hand);
@@ -159,12 +164,17 @@ int Comparator::checkStraightFlush(int hand[][2][5])
 	return score;
 }
 
-int Comparator::checkRoyalFlush(int hand[][2][5]){
+int Comparator::checkRoyalFlush(int hand[2][5]){
 	int score = 0;
+	
+	int handVals[5];
+	for (int i = 0; i < 4; i++) {
+		handVals[i] = hand[1][i];
+	}
+	
+	sort(handVals, handVals + 5);
 
-	sort(hand[1][0], hand[1][5]);
-
-	if (*hand[1][1] == *hand[1][0] + 1 && *hand[1][2] == *hand[1][0] + 2 && *hand[1][3] == *hand[1][0] + 3 && *hand[1][4] == *hand[1][0] + 4 && *hand[1][1] == '10') {
+	if (hand[1][1] == hand[1][0] + 1 && hand[1][2] == hand[1][0] + 2 && hand[1][3] == hand[1][0] + hand[1][4] == hand[1][0] + 4 && hand[1][1] == 10) {
 		if (checkFlush(hand) > 0) {
 			score = 9;
 		}
@@ -173,7 +183,7 @@ int Comparator::checkRoyalFlush(int hand[][2][5]){
 	return score;
 }
 
-int Comparator::getScore(int hand[][2][5]){
+int Comparator::getScore(int hand[2][5]){
 	int score = 0;
 	
 	score = checkNumPair(hand);

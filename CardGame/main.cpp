@@ -100,5 +100,7 @@ int main(void) {
 		cout << endl;
 	}
 	
+	Comparator gameComparator;
 	
+	cout << gameComparator.getScore(playerHands[0]);
 }
