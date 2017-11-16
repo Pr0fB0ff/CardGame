@@ -9,6 +9,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string>
+#include "HandComparator.h"
 
 using namespace std;
 
@@ -98,4 +99,6 @@ int main(void) {
 		}
 		cout << endl;
 	}
+	
+	
 }
