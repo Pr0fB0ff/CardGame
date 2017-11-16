@@ -3,6 +3,7 @@
 
 //#include <stdafx.h>
 #include <algorithm>
+#include <string>
 
 using namespace std;
 
@@ -17,7 +18,7 @@ private:
 	int checkRoyalFlush(int hand[][2][5]);
 public:
 	int getScore(int hand[][2][5]);
-	int getHand(int score);
+	string getHand(int score);
 };
 
 int Comparator::checkNumPair(int hand[][2][5])
@@ -158,8 +159,7 @@ int Comparator::checkStraightFlush(int hand[][2][5])
 	return score;
 }
 
-int Comparator::checkRoyalFlush(int hand[][2][5])
-{
+int Comparator::checkRoyalFlush(int hand[][2][5]){
 	int score = 0;
 
 	sort(hand[1][0], hand[1][5]);
@@ -171,4 +171,70 @@ int Comparator::checkRoyalFlush(int hand[][2][5])
 	}
 
 	return score;
+}
+
+int Comparator::getScore(int hand[][2][5]){
+	int score = 0;
+	
+	score = checkNumPair(hand);
+	if (checkNumKind(hand) > score) {
+		score = checkNumKind(hand);
+	}
+	if (checkStraight(hand) > score) {
+		score = checkStraight(hand);
+	}
+	if (checkFlush(hand) > score) {
+		score = checkFlush(hand);
+	}
+	if (checkFullHouse(hand) > score) {
+		score = checkFullHouse(hand);
+	}
+	if (checkStraightFlush(hand) > score) {
+		score = checkStraightFlush(hand);
+	}
+	if (checkRoyalFlush(hand) > score) {
+		score = checkRoyalFlush(hand);
+	}
+	
+	return score;
+}
+
+string Comparator::getHand(int score){
+	switch (score) {
+		case 0:
+			return "No Pairs";
+			break;
+		case 1:
+			return "One Pair";
+			break;
+		case 2:
+			return "Two Pairs";
+			break;
+		case 3:
+			return "Three of a Kind";
+			break;
+		case 4:
+			return "Straight";
+			break;
+		case 5:
+			return "Flush";
+			break;
+		case 6:
+			return "Full House";
+			break;
+		case 7:
+			return "Four of a Kind";
+			break;
+		case 8:
+			return "Straight Flush";
+			break;
+		case 9:
+			return "Royal Flush";
+			break;
+			
+			
+		default:
+			return "Something done broke!";
+			break;
+	}
 }
