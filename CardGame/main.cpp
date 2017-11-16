@@ -102,5 +102,5 @@ int main(void) {
 	
 	Comparator gameComparator;
 	
-	cout << gameComparator.getScore(playerHands[0]);
+	cout << endl << "#####" << endl << gameComparator.getScore(playerHands[0]) << endl << "####";
 }
