@@ -9,6 +9,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -36,6 +37,7 @@ deck::deck(void){
 }
 
 int * deck::draw(int playerNo){
+	srand(time(NULL));
 	int suit = rand() % 4;
 	int card = rand() % 13;
 	
@@ -154,12 +156,12 @@ int Comparator::check4Kind(int hand[2][5])
 int Comparator::checkStraight(int hand[2][5])
 {
 	int score = 0;
-	int handVals[5];
-	for (int i = 0; i < 4; i++) {
-		handVals[i] = hand[1][i];
+	vector<int> handVals;
+	for (int i = 0; i < 5; i++) {
+		handVals.push_back(hand[1][i]);
 	}
 	
-	sort(handVals, handVals + 5);
+	sort(handVals.begin(), handVals.end());
 	
 	if (handVals[1] == handVals[0] + 1 && handVals[2] == handVals[0] + 2 && handVals[3] == handVals[0] + 3 && handVals[4] == handVals[0] + 4) {
 		score = 5;
@@ -243,15 +245,15 @@ int Comparator::checkStraightFlush(int hand[2][5])
 int Comparator::checkRoyalFlush(int hand[2][5]) {
 	int score = 0;
 	
-	int handVals[5];
-	for (int i = 0; i < 4; i++) {
-		handVals[i] = hand[1][i];
-	}
-	
-	sort(handVals, handVals + 5);
-	
-	if (hand[1][1] == hand[1][0] + 1 && hand[1][2] == hand[1][0] + 2 && hand[1][3] == hand[1][0] + hand[1][4] == hand[1][0] + 4 && hand[1][1] == 10) {
-		if (checkFlush(hand) > 0) {
+	if (checkStraightFlush(hand) > 0){
+		vector<int> handVals;
+		for (int i = 0; i < 5; i++) {
+			handVals.push_back(hand[1][i]);
+		}
+		
+		sort(handVals.begin(), handVals.end());
+		
+		if (handVals.at(0) == 9){
 			score = 9;
 		}
 	}
@@ -262,10 +264,10 @@ int Comparator::checkRoyalFlush(int hand[2][5]) {
 int Comparator::getScore(int hand[2][5]) {
 	
 	if (checkRoyalFlush(hand) > 0) {
-		return 10;
+		return 9;
 	}
 	if (checkStraightFlush(hand) > 0) {
-		return 9;
+		return 8;
 	}
 	if (check4Kind(hand) > 0) {
 		return 7;
@@ -332,62 +334,66 @@ string Comparator::getHand(int score) {
 	}
 }
 
-int main(void) {
-	
-	int playerHands[2][5] = { { 1, 1, 0, 1, 1 }, { 1, 4, 1, 1, 1 } };
-	char end = '\0';
-	
-	Comparator comp;
-	
-	cout << comp.getHand(comp.getScore(playerHands));
-	cin >> end;;
-	
-}
-
 //int main(void) {
-//	char gameState = '\0';
-//	int numPlayers = 0;
-//	string playerNames[5];
-//	deck myDeck;
 //
-//	while (gameState != 'q'){
-//	cout << "Do you wish to play poker or quit (p or q)?" << endl;
-//	cin >> gameState;
+//	int playerHands[2][5] = { { 1, 1, 1, 1, 1 }, { 10, 9, 11, 13, 12 } };
+//	char end = '\0';
 //
-//	if (gameState == 'q'){
-//		return 0;
-//	}
+//	Comparator comp;
 //
-//	while (!(numPlayers >= 1 and numPlayers <= 5)) {
-//		cout << "How many players are playing? ";
-//		cin >> numPlayers;
-//	}
-//
-//	for (int i = 0; i < numPlayers; i++) {
-//		cout << "Enter player name: ";
-//		cin >> playerNames[i];
-//	}
-//
-//	//we initialize an array that holds the player's hands
-//	//playerHands[player number + 1][suit (0) or value (1)][card number (1, 2, 3, 4, or 5)
-//	int playerHands[numPlayers][2][5];
-//
-//	for (int i = 0; i < numPlayers; i++){
-//		cout << playerNames[i] << "'s hand:" << endl;
-//		for (int j = 0; j <= 4; j++){
-//			//cards are drawn from the deck one at a time and placed into the playerHands location
-//			int * singleCard = myDeck.draw(i + 1);
-//			playerHands[i][0][j] = singleCard[0];
-//			playerHands[i][1][j] = singleCard[1];
-//		}
-//		cout << endl;
-//	}
-//
-//	Comparator gameComparator;
-//
-//	cout << endl << "#####" << endl << gameComparator.getScore(playerHands[0]) << endl << "####";
-//
-//	}
+//	cout << comp.getHand(comp.getScore(playerHands));
+//	cin >> end;;
 //
 //}
+
+int main(void) {
+	char gameState = '\0';
+	int numPlayers = 0;
+	string playerNames[5];
+	deck myDeck;
+
+	while (gameState != 'q'){
+	cout << "Do you wish to play poker or quit (p or q)?" << endl;
+	cin >> gameState;
+
+	if (gameState == 'q'){
+		return 0;
+	}
+
+	while (!(numPlayers >= 1 and numPlayers <= 5)) {
+		cout << "How many players are playing? ";
+		cin >> numPlayers;
+	}
+
+	for (int i = 0; i < numPlayers; i++) {
+		cout << "Enter player name: ";
+		cin >> playerNames[i];
+	}
+
+	//we initialize an array that holds the player's hands
+	//playerHands[player number + 1][suit (0) or value (1)][card number (1, 2, 3, 4, or 5)
+	int playerHands[numPlayers][2][5];
+
+	for (int i = 0; i < numPlayers; i++){
+		cout << playerNames[i] << "'s hand:" << endl;
+		for (int j = 0; j <= 4; j++){
+			//cards are drawn from the deck one at a time and placed into the playerHands location
+			int * singleCard = myDeck.draw(i + 1);
+			playerHands[i][0][j] = singleCard[0];
+			playerHands[i][1][j] = singleCard[1];
+		}
+		cout << endl;
+	}
+
+	Comparator gameComparator;
+
+	int scorekeeper[5];
+		
+		for (int i = 0; i < numPlayers; i++) {
+			cout << gameComparator.getScore(playerHands[i]);
+		}
+
+	}
+
+}
 
