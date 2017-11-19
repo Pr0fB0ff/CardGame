@@ -61,7 +61,10 @@ int * deck::draw(int playerNo){
 	return foo;
 }
 int x;
-class Comparator{
+
+////COMPARATOR////
+
+class Comparator {
 private:
 	int checkNumPair(int hand[2][5]);
 	int check3Kind(int hand[2][5]);
@@ -112,14 +115,14 @@ int Comparator::check3Kind(int hand[2][5])
 		for (int i = 0; i < 5; i++) {
 			if (hand[1][i] == value) {
 				counter++;
-				//If three of a kind
-				if (counter == 3) {
-					score = 3;
-					break;
-				}
+			}
+			//If three of a kind
+			if (counter == 3) {
+				score = 3;
+				break;
 			}
 		}
-		
+		counter = 0;
 	}
 	
 	return score;
@@ -135,13 +138,14 @@ int Comparator::check4Kind(int hand[2][5])
 		for (int i = 0; i < 5; i++) {
 			if (hand[1][i] == value) {
 				counter++;
-				//If four of a kind
-				if (counter == 4) {
-					//score = 7;
-					break;
-				}
+			}
+			//If four of a kind
+			if (counter == 4) {
+				score = 7;
+				break;
 			}
 		}
+		counter = 0;
 	}
 	
 	return score;
@@ -157,7 +161,7 @@ int Comparator::checkStraight(int hand[2][5])
 	
 	sort(handVals, handVals + 5);
 	
-	if (hand[1][1] == hand[1][0] + 1 && hand[1][2] == hand[1][0] + 2 && hand[1][3] == hand[1][0] + 3 && hand[1][4] == hand[1][0] + 4) {
+	if (handVals[1] == handVals[0] + 1 && handVals[2] == handVals[0] + 2 && handVals[3] == handVals[0] + 3 && handVals[4] == handVals[0] + 4) {
 		score = 5;
 	}
 	
@@ -208,6 +212,7 @@ int Comparator::checkFullHouse(int hand[2][5])
 				break;
 			}
 		}
+		counter = 0;
 	}
 	
 	if (checkForPair) {
@@ -235,7 +240,7 @@ int Comparator::checkStraightFlush(int hand[2][5])
 	return score;
 }
 
-int Comparator::checkRoyalFlush(int hand[2][5]){
+int Comparator::checkRoyalFlush(int hand[2][5]) {
 	int score = 0;
 	
 	int handVals[5];
@@ -254,36 +259,40 @@ int Comparator::checkRoyalFlush(int hand[2][5]){
 	return score;
 }
 
-int Comparator::getScore(int hand[2][5]){
-	int score = 0;
+int Comparator::getScore(int hand[2][5]) {
 	
-	score = checkNumPair(hand);
-	if (check3Kind(hand) > score) {
-		score = check3Kind(hand);
+	if (checkRoyalFlush(hand) > 0) {
+		return 10;
 	}
-	if (check4Kind(hand) > score) {
-		score = check4Kind(hand);
+	if (checkStraightFlush(hand) > 0) {
+		return 9;
 	}
-	if (checkStraight(hand) > score) {
-		score = checkStraight(hand);
+	if (check4Kind(hand) > 0) {
+		return 7;
 	}
-	if (checkFlush(hand) > score) {
-		score = checkFlush(hand);
+	if (checkFullHouse(hand) > 0) {
+		return 6;
 	}
-	if (checkFullHouse(hand) > score) {
-		score = checkFullHouse(hand);
+	if (checkFlush(hand) > 0) {
+		return 5;
 	}
-	if (checkStraightFlush(hand) > score) {
-		score = checkStraightFlush(hand);
+	if (checkStraight(hand) > 0) {
+		return 4;
 	}
-	if (checkRoyalFlush(hand) > score) {
-		score = checkRoyalFlush(hand);
+	if (check3Kind(hand) > 0) {
+		return 3;
+	}
+	if (checkNumPair(hand) == 2) {
+		return 2;
+	}
+	if (checkNumPair(hand) == 1) {
+		return 1;
 	}
 	
-	return score;
+	return 0;
 }
 
-string Comparator::getHand(int score){
+string Comparator::getHand(int score) {
 	switch (score) {
 		case 0:
 			return "No Pairs";
@@ -324,48 +333,61 @@ string Comparator::getHand(int score){
 }
 
 int main(void) {
-	char gameState = '\0';
-	int numPlayers = 0;
-	string playerNames[5];
-	deck myDeck;
 	
-	while (gameState != 'q'){
-	cout << "Do you wish to play poker or quit (p or q)?" << endl;
-	cin >> gameState;
+	int playerHands[2][5] = { { 1, 1, 0, 1, 1 }, { 1, 4, 1, 1, 1 } };
+	char end = '\0';
 	
-	if (gameState == 'q'){
-		return 0;
-	}
+	Comparator comp;
 	
-	while (!(numPlayers >= 1 and numPlayers <= 5)) {
-		cout << "How many players are playing? ";
-		cin >> numPlayers;
-	}
+	cout << comp.getHand(comp.getScore(playerHands));
+	cin >> end;;
 	
-	for (int i = 0; i < numPlayers; i++) {
-		cout << "Enter player name: ";
-		cin >> playerNames[i];
-	}
-	
-	//we initialize an array that holds the player's hands
-	//playerHands[player number + 1][suit (0) or value (1)][card number (1, 2, 3, 4, or 5)
-	int playerHands[numPlayers][2][5];
-	
-	for (int i = 0; i < numPlayers; i++){
-		cout << playerNames[i] << "'s hand:" << endl;
-		for (int j = 0; j <= 4; j++){
-			//cards are drawn from the deck one at a time and placed into the playerHands location
-			int * singleCard = myDeck.draw(i + 1);
-			playerHands[i][0][j] = singleCard[0];
-			playerHands[i][1][j] = singleCard[1];
-		}
-		cout << endl;
-	}
-	
-	Comparator gameComparator;
-	
-	cout << endl << "#####" << endl << gameComparator.getScore(playerHands[0]) << endl << "####";
-		
-	}
-
 }
+
+//int main(void) {
+//	char gameState = '\0';
+//	int numPlayers = 0;
+//	string playerNames[5];
+//	deck myDeck;
+//
+//	while (gameState != 'q'){
+//	cout << "Do you wish to play poker or quit (p or q)?" << endl;
+//	cin >> gameState;
+//
+//	if (gameState == 'q'){
+//		return 0;
+//	}
+//
+//	while (!(numPlayers >= 1 and numPlayers <= 5)) {
+//		cout << "How many players are playing? ";
+//		cin >> numPlayers;
+//	}
+//
+//	for (int i = 0; i < numPlayers; i++) {
+//		cout << "Enter player name: ";
+//		cin >> playerNames[i];
+//	}
+//
+//	//we initialize an array that holds the player's hands
+//	//playerHands[player number + 1][suit (0) or value (1)][card number (1, 2, 3, 4, or 5)
+//	int playerHands[numPlayers][2][5];
+//
+//	for (int i = 0; i < numPlayers; i++){
+//		cout << playerNames[i] << "'s hand:" << endl;
+//		for (int j = 0; j <= 4; j++){
+//			//cards are drawn from the deck one at a time and placed into the playerHands location
+//			int * singleCard = myDeck.draw(i + 1);
+//			playerHands[i][0][j] = singleCard[0];
+//			playerHands[i][1][j] = singleCard[1];
+//		}
+//		cout << endl;
+//	}
+//
+//	Comparator gameComparator;
+//
+//	cout << endl << "#####" << endl << gameComparator.getScore(playerHands[0]) << endl << "####";
+//
+//	}
+//
+//}
+
