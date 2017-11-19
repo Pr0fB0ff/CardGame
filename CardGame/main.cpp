@@ -4,7 +4,6 @@
 //
 //  Created by Marcel on 11/5/17.
 //  Copyright © 2017 Marcel. All rights reserved.
-//
 
 #include <iostream>
 #include <stdlib.h>
@@ -16,8 +15,8 @@ using namespace std;
 class deck{
 private:
 	int cards[4][13];
-	string suits[4] = {"clubs", "spades", "hearts", "diamonds"};
-	string values[13] = {"two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "Jack", "Queen", "King", "Ace"};
+	string suits[4] = {"Clubs", "Spades", "Hearts", "Diamonds"};
+	string values[13] = {"Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", "Ace"};
 	int cardsDrawn;
 	int hands[5][4][13];
 	
@@ -60,7 +59,17 @@ int * deck::draw(int playerNo){
 	int* foo = (int*) malloc(2 * sizeof(int));
 	foo[0] = suit;
 	foo[1] = card;
+	
 	return foo;
+}
+
+void deck::shuffle(void){
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 12; j++) {
+			cards[i][j] = 0;
+		}
+	}
+	cardsDrawn = 0;
 }
 int x;
 
@@ -359,7 +368,7 @@ int main(void) {
 	if (gameState == 'q'){
 		return 0;
 	}
-
+		numPlayers = 0;
 	while (!(numPlayers >= 1 and numPlayers <= 5)) {
 		cout << "How many players are playing? ";
 		cin >> numPlayers;
@@ -382,6 +391,7 @@ int main(void) {
 			playerHands[i][0][j] = singleCard[0];
 			playerHands[i][1][j] = singleCard[1];
 		}
+		
 		cout << endl;
 	}
 
@@ -390,8 +400,21 @@ int main(void) {
 	int scorekeeper[5];
 		
 		for (int i = 0; i < numPlayers; i++) {
-			cout << gameComparator.getScore(playerHands[i]);
+			scorekeeper[i] = gameComparator.getScore(playerHands[i]);
 		}
+		
+		x = -1;
+		int winner = -1;
+		for (int i = 0; i < 5; i++) {
+			if (scorekeeper[i] > x) {
+				x = scorekeeper[i];
+				winner = i;
+			}
+		}
+		
+		cout << playerNames[winner] << " wins with a " << gameComparator.getHand(x) << endl;
+		
+		myDeck.shuffle();
 
 	}
 
